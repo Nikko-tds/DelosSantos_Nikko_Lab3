@@ -47,7 +47,6 @@ class MembershipApp extends StatelessWidget {
 class MembershipCard extends StatelessWidget {
   const MembershipCard({super.key});
 
-  // TODO: replace with your own values if these change
   static const String photoUrl =
       'https://res.cloudinary.com/ofe3srdc/image/upload/v1786542641/nikko_s_profile.jpg';
   static const String facebookUrl =
