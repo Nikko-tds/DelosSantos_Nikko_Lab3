@@ -1,31 +1,41 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 
-void main() => runApp(const ProfileApp());
+void main() => runApp(const MembershipApp());
 
-class ProfileApp extends StatelessWidget {
-  const ProfileApp({super.key});
+class MembershipApp extends StatelessWidget {
+  const MembershipApp({super.key});
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.green[200],
         appBar: AppBar(
           backgroundColor: Colors.green[200],
           elevation: 0,
-          title: const Text(
-            'My Profile',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.white),
+          title: Row(
+            children: [
+              Image.asset('assets/images/centralian_logo.png', height: 32),
+              const SizedBox(width: 8),
+              Text(
+                'Centralian Membership Card',
+                style: GoogleFonts.poppins(
+                  fontWeight: FontWeight.bold,
+                  color: Colors.white,
+                ),
+              ),
+            ],
           ),
         ),
         body: const SafeArea(
           child: Center(
             child: Padding(
               padding: EdgeInsets.all(20),
-              child: SizedBox(
-                width: 350,
-                child: ProfileCard(),
-              ),
+              child: SizedBox(width: 350, child: MembershipCard()),
             ),
           ),
         ),
@@ -34,98 +44,132 @@ class ProfileApp extends StatelessWidget {
   }
 }
 
-class ProfileCard extends StatelessWidget {
-  const ProfileCard({super.key});
+class MembershipCard extends StatelessWidget {
+  const MembershipCard({super.key});
 
-  Widget _statCard(IconData icon, String value, String label) {
-    return Column(
+  // TODO: replace with your own values if these change
+  static const String photoUrl =
+      'https://res.cloudinary.com/ofe3srdc/image/upload/v1786542641/nikko_s_profile.jpg';
+  static const String facebookUrl =
+      'https://www.facebook.com/share/1LDPi8wTCY/';
+  static const String memberName = 'Nikko Teopengco Delos Santos';
+  static const String role =
+      'Software Engineering Student of Central Philippine University';
+  static const String memberId = 'ID No. 23-2477-54';
+
+  Future<void> _launchFacebook() async {
+    final Uri url = Uri.parse(facebookUrl);
+    if (!await launchUrl(url, mode: LaunchMode.externalApplication)) {
+      throw Exception('Could not launch $facebookUrl');
+    }
+  }
+
+  Widget _detailChip(IconData icon, String label) {
+    return Row(
+      mainAxisSize: MainAxisSize.min,
       children: [
-        CircleAvatar(
-          radius: 20,
-          backgroundColor: Colors.green[50],
-          child: Icon(icon, color: Colors.green, size: 20)
-        ),
-        SizedBox(height: 4),
-        Text(
-          value,
-          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 12),
-        ),
+        Icon(icon, size: 14, color: Colors.green[700]),
+        const SizedBox(width: 4),
         Text(
           label,
-          style: const TextStyle(fontSize: 10, color: Colors.grey),
+          style: GoogleFonts.poppins(fontSize: 11, color: Colors.grey[700]),
         ),
       ],
     );
   }
 
-@override
+  @override
   Widget build(BuildContext context) {
     return Stack(
       clipBehavior: Clip.none,
       alignment: Alignment.topCenter,
       children: [
+        // The card body
         Container(
-          margin: const EdgeInsets.only(top: 50),
+          margin: const EdgeInsets.only(top: 55),
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(15),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.black.withOpacity(0.1),
+                blurRadius: 12,
+                offset: const Offset(0, 6),
+              ),
+            ],
           ),
           child: Padding(
-            padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
-            child: DefaultTextStyle.merge(
-              textAlign: TextAlign.center,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Text(
-                    'Nikko Teopengco Delos Santos',
-                    style: TextStyle(
-                      fontFamily: 'LobsterTwo',
-                      fontSize: 25,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.green[800],
-                    ),
+            padding: const EdgeInsets.fromLTRB(20, 65, 20, 20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  memberName,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.green[800],
                   ),
-                  const SizedBox(height: 4),
-                  Text(
-                    'Software Engineering Student',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  role,
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.poppins(
+                    fontSize: 12,
+                    color: Colors.grey[600],
                   ),
-                  Text(
-                    'Trusting the process, passing the tests, and committing to cross the finish line on time.',
-                    style: TextStyle(fontSize: 9, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 10),
-                  const Divider(),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      _statCard(Icons.grid_view, '6', 'Posts'),
-                      _statCard(Icons.people, '8.5M', 'Followers'),
-                      _statCard(Icons.person_add, '30', 'Following'),
-                    ],
-                  ),
-                  const SizedBox(height: 20),
-                  Container(
+                ),
+                const SizedBox(height: 12),
+                const Divider(),
+                const SizedBox(height: 12),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    _detailChip(Icons.badge_outlined, memberId),
+                    _detailChip(Icons.verified_outlined, 'Active'),
+                  ],
+                ),
+                const SizedBox(height: 20),
+                InkWell(
+                  onTap: _launchFacebook,
+                  borderRadius: BorderRadius.circular(30),
+                  child: Container(
                     width: double.infinity,
-                    padding: const EdgeInsets.symmetric(vertical: 8),
+                    padding: const EdgeInsets.symmetric(vertical: 10),
                     decoration: BoxDecoration(
-                      color: Colors.green,
+                      color: Colors.green[700],
                       borderRadius: BorderRadius.circular(30),
                     ),
-                    child: const Text(
-                      'Edit Profile',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        const Icon(
+                          Icons.facebook,
+                          color: Colors.white,
+                          size: 18,
+                        ),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Visit our Facebook',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
           ),
         ),
+
+        // The circular photo, overlapping the top of the card
         Container(
           width: 100,
           height: 100,
@@ -133,12 +177,16 @@ class ProfileCard extends StatelessWidget {
             color: Colors.white,
             shape: BoxShape.circle,
           ),
-          padding: const EdgeInsets.all(5),
+          padding: const EdgeInsets.all(4),
           child: ClipOval(
-            child: Image.asset(
-              'assets/images/nikko_profile.jpeg',
+            child: CachedNetworkImage(
+              imageUrl: photoUrl,
               fit: BoxFit.cover,
-              alignment: Alignment.topCenter,
+              placeholder: (context, url) => const Center(
+                child: CircularProgressIndicator(strokeWidth: 2),
+              ),
+              errorWidget: (context, url, error) =>
+                  Icon(Icons.person, size: 50, color: Colors.grey[400]),
             ),
           ),
         ),
