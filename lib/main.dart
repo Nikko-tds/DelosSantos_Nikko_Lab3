@@ -83,7 +83,6 @@ class MembershipCard extends StatelessWidget {
       clipBehavior: Clip.none,
       alignment: Alignment.topCenter,
       children: [
-        // The card body
         Container(
           margin: const EdgeInsets.only(top: 55),
           decoration: BoxDecoration(
@@ -167,8 +166,6 @@ class MembershipCard extends StatelessWidget {
             ),
           ),
         ),
-
-        // The circular photo, overlapping the top of the card
         Container(
           width: 100,
           height: 100,
